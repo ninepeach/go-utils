@@ -44,7 +44,7 @@ func PickPort(network string, host string) int {
     return 0
 }
 
-func runTCPEchoServer(addr string) {
+func RunTCPEchoServer(addr string) {
     listener, err := net.Listen("tcp", addr)
     Must(err)
 
@@ -75,7 +75,7 @@ func runTCPEchoServer(addr string) {
     }()
 }
 
-func runUDPEchoServer(addr string) {
+func RunUDPEchoServer(addr string) {
     conn, err := net.ListenPacket("udp", addr)
     Must(err)
 
