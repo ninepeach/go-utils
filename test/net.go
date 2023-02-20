@@ -3,8 +3,10 @@ package test
 import (
 	"bytes"
 	"crypto/rand"
+	"fmt"
 	"io"
 	"net"
+	"net/http"
 	"strconv"
 	"sync"
 	"time"
@@ -89,6 +91,22 @@ func RunUDPEchoServer(addr string) {
 			conn.WriteTo(buf[0:n], addr)
 		}
 	}()
+}
+
+func RunHelloHTTPServer(addr string) {
+	httpHello := func(w http.ResponseWriter, req *http.Request) {
+		w.Write([]byte("HelloWorld"))
+	}
+
+	mux := &http.ServeMux{}
+	mux.HandleFunc("/", httpHello)
+	server := http.Server{
+		Addr:    addr,
+		Handler: mux,
+	}
+	go server.ListenAndServe()
+	time.Sleep(time.Second * 1) // wait for http server
+	fmt.Println("http test server listening on", addr)
 }
 
 func GeneratePayload(length int) []byte {
